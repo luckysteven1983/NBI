@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE stax SYSTEM "stax.dtd">
+
+<stax>
+    <script>
+       machine = '{ONV.DataCollection.RemoteIp}'
+       logName = "TestCaseLog"
+    </script>
+   
+    <defaultcall function="main"/>
+    
+    <function name="main">
+    <function-import directory="./"/>	
+    
+    <sequence>
+    	
+    	<script>
+       compare_script = '{Onv.Installation.CIGITHome}/{Onv.TestCase.KPICompareScript}'	
+       msg_prompt = 'Step1: KPI North File Compare Start'
+       msg_succ = 'Step1: KPI North File Compare Finished'
+       msg_failed = 'Step1: KPI North File Compare Failed, invokeScript=%s.' % (compare_script)
+       msg_terminate = 'Terminating job'
+      </script>
+      
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_prompt , 'str_logname': logName }</call>
+      
+      <process name="'KPI North File Compare'">
+       <location>machine</location>
+       <command mode="'shell'">compare_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+      </process>
+    
+      <if expr="RC == 0">
+         <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_succ , 'str_logname': logName }</call>
+      <else>
+       <sequence>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_failed , 'str_logname': logName }</call>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_terminate , 'str_logname': logName }</call>
+         <terminate block="'main'"/>
+       </sequence>
+      </else>
+      </if>    	
+             
+    </sequence>
+   
+    </function>
+
+</stax>

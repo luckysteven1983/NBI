@@ -1,0 +1,10 @@
+<CMPM>
+  <Step name="BulkCM-Collect" type="Command">
+      <Command>cp $CIHome/testdata/ENODEB_Bulk.xml $NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_raw.xml</Command>
+  </Step>
+  <Step name="Formatter" type="Command">
+    <Command>perl $NBI_HOME/bin/CMScript/Formatter/CMPMFormatter.pl ConfigFile=$NBI_HOME/config/CM/CMDef_OSSNMSMap_CMPMInterwork_TDLTE.xml EscapeConfFile=$NBI_HOME/config/CM/CMSpecialCharMapping.txt</Command>
+    <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_raw.xml</InputFile>
+    <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_CMPM.xml</OutputFile>
+  </Step>
+</CMPM>

@@ -1,0 +1,159 @@
+<!-- BulkCM -->
+    <Activity id="BulkCM-Collect">
+     <Step name="BulkCM-Collect" type="Command">
+      <Command>cp $CIHome/testdata/ENODEB_Bulk.xml $NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_raw.xml</Command>
+     </Step>
+   </Activity>
+
+    <Activity id="BulkCM-Format-L12B">
+      <Step name="BulkCM-Format-L12B" type="Command">
+        <Command>$NBI_JAVA -jar $NBI_HOME/bin/CMScript/Formatter/LTEFormatter.jar</Command>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_raw.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L12B_$sequence_fmt_out.xml</OutputFile>
+        <ConfigFile>$NBI_HOME/config/CM/CMDef_OSSNMSMap_ENODEB_L12B.xml</ConfigFile>  
+        <EscapeConfFile>$NBI_HOME/config/CM/CMSpecialCharMapping.txt</EscapeConfFile>
+      </Step>
+      <Step name="BulkCM-RelationTddCell-Format" type="Command">
+        <Command>/usr/bin/perl  $NBI_HOME/bin/CMScript/Formatter/EUtralCellRelationFormat.pl</Command>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L12B_$sequence_fmt_out.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L12B_$sequence_fmt_out_tmp.xml</OutputFile>
+      </Step>
+      <Step name="Clean-Temp-File" type="Command">
+        <Command>rm $NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L12B_$sequence_fmt_out.xml;mv $NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L12B_$sequence_fmt_out_tmp.xml $NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L12B_$sequence_fmt_out.xml</Command>
+      </Step>
+     <Step name="BulkCM-CreateDnFilterConfig" type="Command">
+       <Command>$NBI_HOME/bin/CMScript/DnFilterConfigCreator.pl</Command>
+       <NEVersion>L12B</NEVersion>
+       <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L12B_$sequence_fmt_out.xml</InputFile>
+       <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_L12B_$sequence.txt</OutputFile>
+     </Step>
+      <Step name="Create-LTE-DN" type="Command">
+        <Command>egrep "ENODEB" $NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_L12B_$sequence.txt | tee $NBI_HOME/DataFile/Retrieved/CM/BulkFilteredDN_L12B_$sequence.txt</Command>
+      </Step>  
+    </Activity>
+    
+    <Activity id="BulkCM-Format-L13B">
+      <Step name="BulkCM-Format-L13B" type="Command">
+        <Command>$NBI_JAVA -jar $NBI_HOME/bin/CMScript/Formatter/LTEFormatter.jar</Command>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_raw.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L13B_$sequence_fmt_out.xml</OutputFile>
+        <ConfigFile>$NBI_HOME/config/CM/CMDef_OSSNMSMap_ENODEB_L13B.xml</ConfigFile>  
+        <EscapeConfFile>$NBI_HOME/config/CM/CMSpecialCharMapping.txt</EscapeConfFile>
+      </Step>
+      <Step name="BulkCM-RelationTddCell-Format" type="Command">
+        <Command>/usr/bin/perl  $NBI_HOME/bin/CMScript/Formatter/EUtralCellRelationFormat.pl</Command>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L13B_$sequence_fmt_out.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L13B_$sequence_fmt_out_tmp.xml</OutputFile>
+      </Step>
+      <Step name="Clean-Temp-File" type="Command">
+       <Command>rm $NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L13B_$sequence_fmt_out.xml;mv $NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L13B_$sequence_fmt_out_tmp.xml $NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L13B_$sequence_fmt_out.xml</Command>
+      </Step>
+     <Step name="BulkCM-CreateDnFilterConfig" type="Command">
+       <Command>$NBI_HOME/bin/CMScript/DnFilterConfigCreator.pl</Command>
+       <NEVersion>L13B</NEVersion>
+       <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L13B_$sequence_fmt_out.xml</InputFile>
+       <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_L13B_$sequence.txt</OutputFile>
+     </Step>
+      <Step name="Create-LTE-DN" type="Command">
+        <Command>egrep "ENODEB" $NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_L13B_$sequence.txt | tee $NBI_HOME/DataFile/Retrieved/CM/BulkFilteredDN_L13B_$sequence.txt</Command>
+      </Step> 
+    </Activity> 
+   <Activity id="BulkCM-LoadTrans-Write_L12B_1">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+         <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+          <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+         <DnPrefix>$DnPrefix</DnPrefix>
+      </Step>
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_ENODEB_BulkCM_L12B_1.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_ENODEB_BulkCM_L12B_1.xml</NMSMocFile>
+  
+      <Step name="TDLTE-Load" type="Load">
+      	<NoFilterMocs>SubNetwork|ManagementNode|manages|ExternalUtranCellTDD|ExternalGsmCell|ExternalGsmCellChild|DataMeContextOamHostIpAddress|FreqManagement|ExternalGsmFreqGroup|ExternalGsmFreq</NoFilterMocs>
+      	<FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/BulkFilteredDN_L12B_$sequence.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L12B_$sequence_fmt_out.xml</InputFile>
+      </Step>
+
+      <Step name="TDLTE-Transform" type="Transform" >
+         <DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+         <RootMoId>-1</RootMoId>
+      </Step>
+
+      <Step name="BulkCM-DBWrite" type="DBWrite" >
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+    </Activity>
+   <Activity id="BulkCM-LoadTrans-Write_L13B_1">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+         <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+          <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+         <DnPrefix>$DnPrefix</DnPrefix>
+      </Step>
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_ENODEB_BulkCM_L13B_1.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_ENODEB_BulkCM_L13B_1.xml</NMSMocFile>
+  
+      <Step name="TDLTE-Load" type="Load">
+      	<NoFilterMocs>SubNetwork|ManagementNode|manages|ExternalUtranCellTDD|ExternalGsmCell|ExternalGsmCellChild|DataMeContextOamHostIpAddress|FreqManagement|ExternalGsmFreqGroup|ExternalGsmFreq</NoFilterMocs>
+      	<FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/BulkFilteredDN_L13B_$sequence.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L13B_$sequence_fmt_out.xml</InputFile>
+      </Step>
+      <Step name="TDLTE-Transform" type="Transform" >
+         <DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+         <RootMoId>-1</RootMoId>
+      </Step>
+      <Step name="BulkCM-DBWrite" type="DBWrite" >
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+    </Activity>
+
+
+   <Activity id="BulkCM-LoadTrans-Write_L12B_2">
+      <Step name="def" type="PreDefine">
+        <OSSRootMo>$OSSRootMo</OSSRootMo>
+        <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+	      <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+	      <DnPrefix>$DnPrefix</DnPrefix>
+     </Step>
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_ENODEB_BulkCM_L12B_2.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_ENODEB_BulkCM_L12B_2.xml</NMSMocFile>
+      <Step name="TDLTE-Load" type="Load">
+        <NoFilterMocs>SubNetwork|ManagementNode|manages|ExternalUtranCellTDD|ExternalGsmCell|ExternalGsmCellChild|DataMeContextOamHostIpAddress|FreqManagement|ExternalGsmFreqGroup|ExternalGsmFreq</NoFilterMocs>
+        <FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/BulkFilteredDN_L12B_$sequence.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L12B_$sequence_fmt_out.xml</InputFile>
+      </Step>
+      <Step name="TDLTE-Transform" type="Transform" >
+          <DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+          <RootMoId>-1</RootMoId>
+      </Step>
+      <Step name="BulkCM-DBWrite" type="DBWrite" >
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+    </Activity>
+   <Activity id="BulkCM-LoadTrans-Write_L13B_2">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+         <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+	  <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+	  <DnPrefix>$DnPrefix</DnPrefix>
+      </Step>
+
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_ENODEB_BulkCM_L13B_2.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_ENODEB_BulkCM_L13B_2.xml</NMSMocFile>
+      <Step name="TDLTE-Load" type="Load">
+        <NoFilterMocs>SubNetwork|ManagementNode|manages|ExternalUtranCellTDD|ExternalGsmCell|ExternalGsmCellChild|DataMeContextOamHostIpAddress|FreqManagement|ExternalGsmFreqGroup|ExternalGsmFreq</NoFilterMocs>
+        <FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/BulkFilteredDN_L13B_$sequence.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_L13B_$sequence_fmt_out.xml</InputFile>
+      </Step>
+      <Step name="TDLTE-Transform" type="Transform" >
+          <DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+          <RootMoId>-1</RootMoId>
+      </Step>
+      <Step name="BulkCM-DBWrite" type="DBWrite" >
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+    </Activity>

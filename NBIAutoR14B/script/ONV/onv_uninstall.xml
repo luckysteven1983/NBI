@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE stax SYSTEM "stax.dtd">
+
+<stax>
+    <script>
+       onv_uninstall_script = '{Onv.Install.CIHome}/script/uninstallonv_ci.sh'
+       machine = '10.185.13.71'
+    </script>
+   
+    <defaultcall function="main"/>
+    
+    <function name="main">
+   
+    <sequence>
+     <process name="'uninstall old onv package firstly'">
+       <location>machine</location>
+       <command mode="'shell'">onv_uninstall_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+     </process>
+    
+     <if expr="RC != 0">
+        <message>'Error: RC=%s, script=%s' % (RC, onv_uninstall_scriptm)</message>
+      <else>
+        <message>'Process RC was 0. '</message>
+      </else>
+     </if>    
+    
+    </sequence>
+   
+    </function>
+
+</stax>

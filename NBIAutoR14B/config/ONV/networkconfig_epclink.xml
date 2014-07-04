@@ -1,0 +1,38 @@
+<!-- This is the template file for ONV EPC Link Customizing Configuration use.
+Please manually create /var/opt/ericsson/onv/data/networkconfig_epclink.xml following this template when needed.
+-->
+<NetworkConfig>
+  <Links>
+    <Link>
+      <fromNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVCORE,ManagedElement=GGSN12AONV01</fromNE>
+      <toNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVCORE,ManagedElement=SAPC12AONV01</toNE>
+      <linkType>Gx</linkType>
+      <linkDirection>Bidirection</linkDirection>
+    </Link>
+    <Link>
+      <fromNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVCORE,ManagedElement=SGSNMME13AONV01</fromNE>
+      <toNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVCORE,ManagedElement=HSS12BONV01</toNE>
+      <linkType>S6a</linkType>
+      <linkDirection>Bidirection</linkDirection>
+    </Link>
+    <Link>
+      <fromNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVCORE,ManagedElement=SGSNMME13AONV02</fromNE>
+      <toNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVRAN,ManagedElement=ENODEB12B01</toNE>
+      <linkType>S1</linkType>
+      <linkDirection>Bidirection</linkDirection>
+    </Link>
+    <Link>
+      <fromNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVCORE,ManagedElement=SGSNMME13AONV01</fromNE>
+      <toNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVCORE,ManagedElement=GGSN12AONV01</toNE>
+      <linkType>S11</linkType>
+      <linkDirection>Bidirection</linkDirection>
+    </Link>
+    <Link>
+      <fromNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVCORE,ManagedElement=SGSNMME13AONV01</fromNE>
+      <toNE>SubNetwork=ONRM_ROOT_MO,SubNetwork=ONVCORE,ManagedElement=SGSNMME13AONV02</toNE>
+      <linkType>S10</linkType>
+      <linkDirection>Bidirection</linkDirection>
+    </Link>
+  </Links>
+</NetworkConfig>
+

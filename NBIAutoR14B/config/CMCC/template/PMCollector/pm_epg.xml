@@ -1,0 +1,27 @@
+<PM-CLI name="COLLECT-$nename">
+  <Enable>true</Enable>
+  <LoginType>telnet</LoginType>
+  <!-- telnet (on port 23) info GGSN. Mandatory to configure-->
+  <TelnetAccounts UserName="$neusername" Ip="$neip" Password="$nepassword" />
+  <ManagedElement>$nename</ManagedElement>
+  <CollectOmcMoc>EthernetPort</CollectOmcMoc>
+  <ExecuteFile>/bin/PMScript/pmmml_ggsnmpg_telnet.pl</ExecuteFile>
+  <LocalPath>/DataFile/Retrieved/PM/CounterFile/$localpath</LocalPath>
+</PM-CLI>
+
+<OSSName name="oss1_$nename">
+  <ip>$ossip</ip>
+  <user>$ossusername</user>
+  <passwd>$osspassword</passwd>
+  <remotepath>/var/opt/ericsson/ccpdm/pm_storage1/ggsn-mpg-xml/$nename</remotepath>
+  <localpath>/DataFile/Retrieved/PM/CounterFile/$localpath</localpath>
+  <wildcard>*pgw.xml.gz,*sgw.xml.gz</wildcard>
+  <filetype>XML</filetype>
+  <mode>I</mode>
+  <enable>true</enable>
+  <ManagedElement>$nename</ManagedElement>
+  <TimeShift>0</TimeShift>
+  <netype>$netype</netype>
+</OSSName>
+      
+      

@@ -1,0 +1,182 @@
+<common>
+  <config id="sgsnmme11b" type="SGSNMME" version="11B"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>51</localpath>
+  </config>
+  <config id="sgsnmme13a" type="SGSNMME" version="13A"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>51</localpath>
+  </config>
+  <config id="sgsnmme13B" type="SGSNMME" version="13B"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>51</localpath>
+  </config>
+  <config id="sgsnmme14A" type="SGSNMME" version="14A"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>51</localpath>
+  </config>
+  <config id="ggsnmpg12a" type="GGSNMPG" version="12A"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <nehwplat>M120</nehwplat>  
+    <localpath>52</localpath>
+  </config>
+  <config id="epg13as" type="EPG" version="13A-S"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <nehwplat>SSR</nehwplat>  
+    <localpath>52</localpath>
+  </config>
+  <config id="epg13am" type="EPG" version="13A-M"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <nehwplat>M320</nehwplat>  
+    <localpath>52</localpath>
+  </config>
+  <config id="mm8" type="MM" version="8"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>60</localpath>
+  </config>
+  <config id="mm7" type="MM" version="7"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>60</localpath>
+  </config>
+  <config id="hss" type="HSS" version="12A"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>54</localpath>
+  </config>
+  <config id="hss12b" type="HSS" version="12B"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>54</localpath>
+  </config>
+  <config id="hss14a" type="HSS" version="14A">
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>54</localpath>
+  </config>
+  <config id="hss12bm" type="HSS" version="12B-M"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>54</localpath>
+  </config>
+  <config id="hss14am" type="HSS" version="14A-M">
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>54</localpath>
+  </config>
+  <config id="hlrbs13b" type="HLRBS" version="13B"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>58</localpath>
+  </config>
+  <config id="hlrbs12a" type="HLRBS" version="12A"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>58</localpath>
+  </config>
+
+  <!--config id="hlrbs12a" type="HLRBS" version="12A">
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=BJHLR,ManagedElement=$nename</nedn>
+    <localpath>58</localpath>
+  </config-->
+ 
+  <config id="hlr12" type="HLR" version="R12"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CUCC,ManagedElement=$nename</nedn>
+    <localpath>55</localpath>
+  </config>
+  <config id="hlr14" type="HLR" version="R14_1"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CUCC,ManagedElement=$nename</nedn>
+    <localpath>55</localpath>
+  </config>
+  <config id="dsc" type="DSC" version="13A"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>54</localpath>
+  </config>
+  <config id="sapc13b" type="SAPC" version="13B"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>53</localpath>
+  </config>
+  <config id="sapc12a" type="SAPC" version="12A"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>53</localpath>
+  </config>
+  <config id="sapc3" type="SAPC" version="11B"> 
+    <nedn>SubNetwork=ONRM_ROOT_MO,SubNetwork=CMCC_Mobile,ManagedElement=$nename</nedn>
+    <localpath>53</localpath>
+  </config>
+  <config id="tdmsc12_1" type="TDMSC" version="R12_1">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>55</localpath>
+    <trdnumlistofprbt>0,1,2,4,5,6,7,8,21</trdnumlistofprbt>
+  </config>
+  <config id="tdmsc14_1" type="TDMSC" version="R14_1">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>55</localpath>
+    <trdnumlistofprbt>0,1,2,4,5,6,7,8,21</trdnumlistofprbt>
+  </config>
+  <config id="tdmsc12a" type="TDMSC" version="12A">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>55</localpath>
+    <trdnumlistofprbt>0,1,2,4,5,6,7,8,21</trdnumlistofprbt>
+  </config>
+  <config id="tdmsc13a" type="TDMSC" version="13A">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>55</localpath>
+    <trdnumlistofprbt>0,1,2,4,5,6,7,8,21</trdnumlistofprbt>
+  </config>
+  <config id="tdmscbc14_1" type="TDMSCBC" version="R14_1">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>56</localpath>
+    <trdnumlistofprbt>0,1,2,4,5,6,7,8,21</trdnumlistofprbt>
+    <bcmode>CLUSTER</bcmode>
+  </config> 
+  <config id="tdmscbc13a" type="TDMSCBC" version="13A">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>56</localpath>
+    <trdnumlistofprbt>0,1,2,4,5,6,7,8,21</trdnumlistofprbt>
+    <bcmode>CLUSTER</bcmode>
+  </config> 
+  <config id="tdmgw4_2" type="TDMGW" version="R4_2">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <amosdn>$OSSRegionRootMo,SubNetwork=CMCC-CORE,MeContext=$nename</amosdn>
+    <amosinvdn>$OSSRootMo,SubNetwork=CMCC-CORE,MeContext=$nename</amosinvdn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>57</localpath>
+    <gmp>V3.0</gmp>
+    <bc>3004</bc>
+  </config>
+  <config id="tdmgw6_1" type="TDMGW" version="R6_1">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <amosdn>$OSSRegionRootMo,SubNetwork=CMCC-CORE,MeContext=$nename</amosdn>
+    <amosinvdn>$OSSRootMo,SubNetwork=CMCC-CORE,MeContext=$nename</amosinvdn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>57</localpath>
+    <gmp>V3.0</gmp>
+    <bc>3004</bc>
+  </config>
+  <config id="tdmgw6fp2" type="TDMGW" version="R6FP2">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <amosdn>$OSSRegionRootMo,SubNetwork=CMCC-CORE,MeContext=$nename</amosdn>
+    <amosinvdn>$OSSRootMo,SubNetwork=CMCC-CORE,MeContext=$nename</amosinvdn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>57</localpath>
+    <gmp>V2.1</gmp>
+    <bc>214</bc>
+  </config>
+  <config id="tdmgw6fp3" type="TDMGW" version="R6FP3">
+    <nedn>$OSSRootMo,SubNetwork=CMCC-CORE,ManagedElement=$nename</nedn>
+    <amosdn>$OSSRegionRootMo,SubNetwork=CMCC-CORE,MeContext=$nename</amosdn>
+    <amosinvdn>$OSSRootMo,SubNetwork=CMCC-CORE,MeContext=$nename</amosinvdn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>57</localpath>
+    <gmp>V2.1</gmp>
+    <bc>214</bc>
+  </config>
+  <config id="MGW301" type="TDMGW" version="R4_2" name="MGW301">
+    <nedn>$OSSRootMo,SubNetwork=WJ,ManagedElement=$nenam</nedn>
+    <amosdn>$OSSRegionRootMo,SubNetwork=WJ,MeContext=$nename</amosdn>
+    <amosinvdn>$OSSRootMo,SubNetwork=WJ,MeContext=$nename</amosinvdn>
+    <omcdnprefix>SubNetwork=NRO_RootMo</omcdnprefix>
+    <localpath>57</localpath>
+    <gmp>V3.0</gmp>
+    <bc>3004</bc>
+  </config>
+</common>

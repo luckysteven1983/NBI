@@ -1,0 +1,15 @@
+<OSSName name="oss1_$nename">
+  <ip>$ossip</ip>
+  <user>$ossusername</user>
+  <passwd>$osspassword</passwd>
+  <remotepath>/var/opt/ericsson/ccpdm/pm_storage1/hss_sim_SZsite/$nename</remotepath>
+  <localpath>/DataFile/Retrieved/PM/CounterFile/$localpath</localpath>
+  <wildcard>*$nename_HSS-ESM*,*$nename_PlatformMeasures*,*$nename_IPv4_MeasurementJob*,*$nename_SS7Statistics*</wildcard>
+  <filetype>XML</filetype>
+  <mode>I</mode>
+  <enable>true</enable>
+  <ManagedElement>$nename</ManagedElement>
+  <TimeShift>8</TimeShift>
+  <netype>$netype</netype>
+</OSSName>
+

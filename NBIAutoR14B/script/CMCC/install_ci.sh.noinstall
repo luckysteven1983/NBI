@@ -1,0 +1,20 @@
+#!/bin/sh
+# Author: eyujche
+# Date: 2013-11-15
+# Description: This script used for CMCC container installation
+
+
+grep staf /opt/nbi/.cshrc
+if [ $? != 0 ]
+then
+
+  basedir=/opt
+
+
+  echo "#####################set staf env##########################" >> /opt/nbi/.cshrc
+  echo setenv CLASSPATH \${CLASSPATH}:$basedir/staf/lib/JSTAF.jar:$basedir/staf/lib/STAFHTTPSLS.jar >>/opt/nbi/.cshrc
+  echo setenv PATH \${PATH}:$basedir/staf/bin >>/opt/nbi/.cshrc
+  echo setenv LD_LIBRARY_PATH \${LD_LIBRARY_PATH}:$basedir/staf/lib >>/opt/nbi/.cshrc
+  echo setenv STAFCONVDIR $basedir/staf/codepage >>/opt/nbi/.cshrc
+  
+fi

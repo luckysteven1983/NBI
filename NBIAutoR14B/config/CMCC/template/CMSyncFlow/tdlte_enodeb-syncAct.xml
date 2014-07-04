@@ -1,0 +1,98 @@
+<!-- BulkCM -->
+    <Activity id="BulkCM-Sync-Step1">
+
+     <Step name="BulkCM-Collect" type="Command">
+      <Command>cp $CIHome/testdata/ENODEB_Bulk.xml $NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_raw.xml</Command>
+     </Step>
+  
+     <Step name="BulkCM-Format" type="Command">
+        <Command>$NBI_JAVA -jar $NBI_HOME/bin/CMScript/Formatter/LTEFormatter.jar</Command>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_raw.xml</InputFile>
+      <OneLevelOutput>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_fmt_1.xml</OneLevelOutput>
+      <TwoLevelOutput>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_fmt_2.xml</TwoLevelOutput>
+        <config>$NBI_HOME/config/CM/LTE_L12B_Bulk.xml</config>  
+				<EscapeConfFile>$NBI_HOME/config/CM/CMSpecialCharMapping.txt</EscapeConfFile>
+     </Step>
+     
+     <Step name="BulkCM-CreateDnFilterConfig-Step1" type="Command">
+        <Command>$NBI_HOME/bin/CMScript/DnFilterConfigCreator.pl</Command>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_fmt_1.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_$sequence_1.txt</OutputFile>
+     </Step>
+     
+     <Step name="BulkCM-CreateDnFilterConfig-Step2" type="Command">
+        <Command>$NBI_HOME/bin/CMScript/DnFilterConfigCreator.pl</Command>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_fmt_2.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_$sequence_2.txt</OutputFile>
+     </Step>
+      
+      <Step name="Create-LTE-DN-Step1" type="Command">
+        <Command>egrep "ENODEB" $NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_$sequence_1.txt | tee $NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_$sequence_BulkCM_1.txt</Command>
+      </Step>  
+      
+      <Step name="Create-LTE-DN-Step2" type="Command">
+        <Command>egrep "ENODEB" $NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_$sequence_2.txt | tee $NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_$sequence_BulkCM_2.txt</Command>
+      </Step>    
+
+    </Activity>
+    
+    <Activity id="BulkCM-Sync-Step2">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+         <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+				 <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+				 <DnPrefix>$DnPrefix</DnPrefix>
+      </Step>
+
+
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_TDLTE_BulkCM_L12B_1.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_TDLTE_BulkCM_L12B_1.xml</NMSMocFile>
+  
+      <Step name="TDLTE-Load" type="Load">
+      	<NoFilterMocs>SubNetwork|ManagementNode|manages</NoFilterMocs>
+      	<FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_$sequence_BulkCM_1.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_fmt_1.xml</InputFile>
+      </Step>
+
+      <Step name="TDLTE-Transform" type="Transform" >
+				<DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+				<RootMoId>-1</RootMoId>
+      </Step>
+
+      <Step name="BulkCM-DBWrite" type="DBWrite" >
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+
+    </Activity>
+    
+    <Activity id="BulkCM-Sync-Step3">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+         <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+				 <DnPrefix>$DnPrefix</DnPrefix>
+				 <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+      </Step>
+
+
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_TDLTE_BulkCM_L12B_2.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_TDLTE_BulkCM_L12B_2.xml</NMSMocFile>
+  
+      <Step name="TDLTE-Load" type="Load">
+      	<NoFilterMocs>SubNetwork|ManagementNode|manages</NoFilterMocs>
+      	<FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/OSSFilteredDN_$sequence_BulkCM_2.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/OSSBulkCM_$sequence_fmt_2.xml</InputFile>
+      </Step>
+
+      <Step name="TDLTE-Transform" type="Transform" >
+       <RootMoId>-1</RootMoId>
+      </Step>
+
+      <Step name="BulkCM-DBWrite" type="DBWrite" >
+				<DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+
+    </Activity>
+

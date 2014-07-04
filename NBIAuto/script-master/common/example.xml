@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE stax SYSTEM "stax.dtd">
+
+<stax>
+     
+    <defaultcall function="main"/>
+    
+    <function name="main">
+    <function-import file="invokeCMD.xml"/>	
+    
+    <function-map-args>
+    <function-required-arg name="ID">
+       The ID param need pass to script.
+    </function-required-arg>
+    </function-map-args>
+    
+    <sequence>
+    	<script>
+    		machine = '{%s}' % (ID + ".DataCollection.RemoteIp")
+    		logname = ID + "_InstallationLog"
+    	</script>
+    	
+    	<script>
+       _script = '{%s}/{%s}' % (ID + ".Installation.CIHome",ID + ".Installation.testScript")
+       _serial = "1"
+       _desc= "test no param"
+      </script>
+        
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+    
+      <script>
+       myscript = '{%s}/{%s}' % (ID + ".Installation.CIHome",ID + ".Installation.testScript")
+       _script = '%s %s' % (myscript,ID)
+       _serial = "2"
+       _desc= "test pass param"
+      </script>
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+
+      <script>
+       myscript = '{%s} All' % (ID + ".Installation.StartScript")
+       _script = 'su - %s -c "%s"' % ("nbi",myscript)
+       _serial = "3"
+       _desc= "NBI Module Startup"
+      </script>
+    	
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+
+    </sequence>
+   
+    </function>
+
+</stax>

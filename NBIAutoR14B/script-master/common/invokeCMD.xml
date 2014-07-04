@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE stax SYSTEM "stax.dtd">
+
+<stax>
+     
+    <function name="invokeCMD">
+    <function-import file="./writeUserlog.xml"/>	
+    
+    <function-map-args>
+    <function-required-arg name="str_script">
+        A string which defines the script which to be invoked
+    </function-required-arg>	
+    
+    <function-required-arg name="str_step_serial">
+        A string which defines the step serial 
+    </function-required-arg>
+    
+    <function-required-arg name="str_stepdesc">
+        A string which defines the step description 
+    </function-required-arg>
+    
+    <function-required-arg name="logName">
+        A string which defines the logname
+    </function-required-arg>
+    
+    <function-required-arg name="str_machine">
+        A string which defines the machine on which to run the script
+    </function-required-arg>
+    
+    </function-map-args>
+    
+    <sequence>
+    
+    	<script>
+    	 msg_prompt = 'Step%s: %s' % (str_step_serial,str_stepdesc)
+       msg_start = msg_prompt + " Start"
+       msg_succ =  msg_prompt + " Finished"
+       msg_failed = '%s Failed, invoke script is %s' % (msg_prompt, str_script)
+       msg_terminate = 'Terminating job'
+      </script>
+      
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_start, 'str_logname': logName }</call>
+      
+      <process name="'msg_prompt'">
+       <location>str_machine</location>
+       <command mode="'shell'">str_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+      </process>
+    
+      <if expr="RC == 0">
+         <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_succ, 'str_logname': logName }</call>
+      <else>
+       <sequence>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_failed, 'str_logname': logName}</call>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_terminate, 'str_logname': logName }</call>
+         <terminate block="'main'"/>
+       </sequence>
+      </else>
+      </if>
+    </sequence>
+    
+    
+    </function>
+
+</stax>

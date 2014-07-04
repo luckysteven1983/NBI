@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE stax SYSTEM "stax.dtd">
+
+<stax>
+   
+    <defaultcall function="main"/>
+    
+    <function name="main">
+    <function-import file="../common/invokeCMD.xml"/>	
+    
+    <function-map-args>
+    <function-required-arg name="ID">
+       The ID param need pass to script to specify the user info, each user own one set configuration himself.
+    </function-required-arg>
+    </function-map-args>
+        
+    <sequence>
+    	<script>
+    		machine = '{%s}' % (ID + ".DataCollection.RemoteIp")
+    		logname = ID + "_InstallationLog"
+      </script>
+      
+    	<script>
+       myscript = '{%s}/{%s}' % (ID + ".Installation.CIHome",ID + ".Installation.chmodScript")
+       _script = '%s %s' % (myscript,ID)
+       _serial = "1"
+       _desc= "Installation Preparation"
+      </script>
+        
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+
+   	
+      <script>
+       myscript = '{%s}/{%s}' % (ID + ".Installation.CIHome",ID + ".Installation.StopScript")
+       _script = 'su - %s -c "%s"' % ("nbi",myscript)
+       _serial = "2"
+       _desc = "Stop NBI Service"
+      </script>
+    	
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+   	
+   	
+   	  <script>
+       myscript = '{%s}/{%s}' % (ID + ".Installation.CIHome",ID + ".Installation.InstallScript")
+       _script = '%s %s' % (myscript,ID)
+       _serial = "3"
+       _desc = "Installation"
+      </script>
+        
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+
+   	  <script>
+       _script = '{%s}/{%s}' % (ID + ".Installation.CIHome",ID + ".Installation.CommissionPrepareScript")
+       _serial = "4"
+       _desc = "Commission Preparation"
+      </script>
+        
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+ 
+     
+      <script>
+       myscript = '{%s}/{%s} %s' % (ID + ".Installation.CIHome",ID + ".Installation.CommissionScript", ID)
+       _script = 'su - %s -c "%s"' % ("nbi",myscript)
+       _serial = "5"
+       _desc = "Commission"
+      </script>
+    	
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+
+      <script>
+       myscript = '{%s}/{%s} %s' % (ID + ".Installation.CIHome",ID + ".Installation.StartCMSyncScript", ID)
+       _script = 'su - %s -c "%s"' % ("nbi",myscript)
+       _serial = "6"
+       _desc = "CM Sync"
+      </script>
+    	
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+      
+      <script>
+       myscript = '{%s} All' % (ID + ".Installation.StartScript")
+       _script = 'su - %s -c "%s"' % ("nbi",myscript)
+       _serial = "7"
+       _desc= "NBI Module Startup"
+      </script>
+    	
+      <call function="'invokeCMD'">{ 'str_script': _script, 'str_step_serial' : _serial, 'str_stepdesc': _desc, 'logName': logname, 'str_machine': machine }</call>
+
+    </sequence>
+   
+    </function>
+
+</stax>

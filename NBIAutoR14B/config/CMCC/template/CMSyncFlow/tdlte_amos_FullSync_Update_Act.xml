@@ -1,0 +1,157 @@
+   <Activity id ="ENODEB_AMOS_FullSync_Collect_L12B">
+     <Step name="TDLTE_AMOS_FullSync_Collect_command" type="Command">
+       <Command>echo omit it</Command>
+     </Step>
+   </Activity>
+   <Activity id ="ENODEB_AMOS_FullSync_Collect_L13B">
+     <Step name="TDLTE_AMOS_FullSync_Collect_command_L13B" type="Command">
+       <Command>echo omit it</Command>
+     </Step>
+   </Activity>
+   <Activity id="ENODEB_AMOS_FULLSync_Format_L12B">
+     <Step name="TDLTE_AMOS_FULLSync_Format" type="Command">
+       <Command>perl $NBI_HOME/bin/CMScript/Formatter/CM_ENODEB_AMOS_L12B_Formatter.pl</Command>
+       <InputFile>$NBI_HOME/DataFile/Retrieved/CM/enodeb_amosfilelist_L12B.txt</InputFile>
+       <EscapeConfFile>$NBI_HOME/config/CM/CMSpecialCharMapping.txt</EscapeConfFile>
+       <FirstLevelOutputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L12B_$sequence_Fmt_Level_1.xml</FirstLevelOutputFile>
+       <SecondLevelOutputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L12B_$sequence_Fmt_Level_2.xml</SecondLevelOutputFile>
+     </Step>
+    <Step name="TDLTE_AMOS_CreateDnFilterConfig_Level_1" type="Command">
+      <Command>$NBI_HOME/bin/CMScript/CM_ENODEB_AMOS_DnFilterCfgCreator.pl</Command>
+      <NEVersion>L12B</NEVersion>
+ 	      <InputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L12B_$sequence_Fmt_Level_1.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_AMOS_L12B_FilterDN_$sequence_Level_1.txt</OutputFile>
+    </Step>
+    <Step name="TDLTE_AMOS_CreateDnFilterConfig_Level_2" type="Command">
+        <Command>$NBI_HOME/bin/CMScript/CM_ENODEB_AMOS_DnFilterCfgCreator.pl</Command>
+        <NEVersion>L12B</NEVersion>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L12B_$sequence_Fmt_Level_2.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_AMOS_L12B_FilterDN_$sequence_Level_2.txt</OutputFile>
+    </Step>   
+   </Activity>
+   <Activity id="ENODEB_AMOS_FULLSync_Format_L13B">
+     <Step name="TDLTE_AMOS_FULLSync_Format" type="Command">
+       <Command>perl $NBI_HOME/bin/CMScript/Formatter/CM_ENODEB_AMOS_L12B_Formatter.pl</Command>
+       <InputFile>$NBI_HOME/DataFile/Retrieved/CM/enodeb_amosfilelist_L13B.txt</InputFile>
+       <EscapeConfFile>$NBI_HOME/config/CM/CMSpecialCharMapping.txt</EscapeConfFile>
+       <FirstLevelOutputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L13B_$sequence_Fmt_Level_1.xml</FirstLevelOutputFile>
+       <SecondLevelOutputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L13B_$sequence_Fmt_Level_2.xml</SecondLevelOutputFile>
+     </Step>
+    <Step name="TDLTE_AMOS_CreateDnFilterConfig_Level_1" type="Command">
+        <Command>$NBI_HOME/bin/CMScript/CM_ENODEB_AMOS_DnFilterCfgCreator.pl</Command>
+        <NEVersion>L13B</NEVersion> 
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L13B_$sequence_Fmt_Level_1.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_AMOS_L13B_FilterDN_$sequence_Level_1.txt</OutputFile>
+    </Step>
+    <Step name="TDLTE_AMOS_CreateDnFilterConfig_Level_2" type="Command">
+        <Command>$NBI_HOME/bin/CMScript/CM_ENODEB_AMOS_DnFilterCfgCreator.pl</Command>
+        <NEVersion>L13B</NEVersion>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L13B_$sequence_Fmt_Level_2.xml</InputFile>
+        <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_AMOS_L13B_FilterDN_$sequence_Level_2.txt</OutputFile>
+    </Step>   
+   </Activity>
+   <Activity id="ENODEB_AMOS_FULLSync_LoadTrans_Write_L12B_1">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+         <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+         <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+         <DnPrefix>$DnPrefix</DnPrefix>
+      </Step>
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_ENODEB_AMOS_L12B_FullSync_Level_1.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_ENODEB_AMOS_L12B_FullSync_Level_1.xml</NMSMocFile>
+      <Step name="TDLTE_AMOS_Load" type="Load">
+      	<NoFilterMocs>SubNetwork|ManagementNode|manages</NoFilterMocs>
+      	<FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/CM_AMOS_L12B_FilterDN_$sequence_Level_1.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L12B_$sequence_Fmt_Level_1.xml</InputFile>
+      </Step>
+      <Step name="TDLTE_AMOS_Transform" type="Transform" >
+         <DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+         <RootMoId>-1</RootMoId>
+      </Step>
+
+      <Step name="TDLTE_AMOS_DBWrite" type="DBWrite" >
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+   </Activity>
+   <Activity id="ENODEB_AMOS_FULLSync_LoadTrans_Write_L13B_1">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+         <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+         <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+         <DnPrefix>$DnPrefix</DnPrefix>
+      </Step>
+      
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_ENODEB_AMOS_L13B_FullSync_Level_1.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_ENODEB_AMOS_L13B_FullSync_Level_1.xml</NMSMocFile>
+      
+      <Step name="TDLTE_AMOS_Load" type="Load">
+      	<NoFilterMocs>SubNetwork|ManagementNode|manages</NoFilterMocs>
+      	<FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/CM_AMOS_L13B_FilterDN_$sequence_Level_1.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L13B_$sequence_Fmt_Level_1.xml</InputFile>
+      </Step>
+      
+      <Step name="TDLTE_AMOS_Transform" type="Transform" >
+         <DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+         <RootMoId>-1</RootMoId>
+      </Step>
+
+      <Step name="TDLTE_AMOS_DBWrite" type="DBWrite" >
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+   </Activity>
+   <Activity id="ENODEB_AMOS_FULLSync_LoadTrans_Write_L12B_2">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+         <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+         <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+         <DnPrefix>$DnPrefix</DnPrefix>
+      </Step>
+      
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_ENODEB_AMOS_L12B_FullSync_Level_2.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_ENODEB_AMOS_L12B_FullSync_Level_2.xml</NMSMocFile>
+      
+      <Step name="TDLTE_AMOS_Load" type="Load">
+      	<NoFilterMocs>SubNetwork|ManagementNode|manages</NoFilterMocs>
+      	<FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/CM_AMOS_L12B_FilterDN_$sequence_Level_2.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L12B_$sequence_Fmt_Level_2.xml</InputFile>
+      </Step>
+      
+      <Step name="TDLTE_AMOS_Transform" type="Transform" >
+         <DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+         <RootMoId>-1</RootMoId>
+      </Step>
+
+      <Step name="TDLTE_AMOS_DBWrite" type="DBWrite" >
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+   </Activity>
+   <Activity id="ENODEB_AMOS_FULLSync_LoadTrans_Write_L13B_2">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+         <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+         <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+         <DnPrefix>$DnPrefix</DnPrefix>
+      </Step>
+      
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_ENODEB_AMOS_L13B_FullSync_Level_2.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_ENODEB_AMOS_L13B_FullSync_Level_2.xml</NMSMocFile>
+      
+      <Step name="TDLTE_AMOS_Load" type="Load">
+      	<NoFilterMocs>SubNetwork|ManagementNode|manages</NoFilterMocs>
+      	<FilterMocs>ManagedElement</FilterMocs>
+        <DnFilterConfig>$NBI_HOME/DataFile/Retrieved/CM/CM_AMOS_L13B_FilterDN_$sequence_Level_2.txt</DnFilterConfig>
+        <InputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_ENODEB_AMOS_L13B_$sequence_Fmt_Level_2.xml</InputFile>
+      </Step>
+      
+      <Step name="TDLTE_AMOS_Transform" type="Transform" >
+         <DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+         <RootMoId>-1</RootMoId>
+      </Step>
+
+      <Step name="TDLTE_AMOS_DBWrite" type="DBWrite" >
+        <PurgeId>BulkCM-Sync-update</PurgeId>
+      </Step>
+   </Activity>

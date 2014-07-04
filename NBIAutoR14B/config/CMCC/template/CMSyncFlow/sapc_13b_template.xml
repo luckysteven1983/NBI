@@ -1,0 +1,85 @@
+    <Activity id="$netype_$never_$nename-SyncAct">
+      <Step name="def" type="PreDefine">
+        <OSSRootMo>$OSSRootMo</OSSRootMo>
+        <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+				<DnPrefix>$DnPrefix</DnPrefix>
+				<NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+      </Step>
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_$netype_$never.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_$netype_$never.xml</NMSMocFile>    
+      <Step name="Collect" type="Command">
+         <Command>/usr/bin/perl $NBI_HOME/bin/CMScript/Formatter/tsp_new.pl</Command>
+         <TspIpAddr>$neip</TspIpAddr>
+         <TspSSHUsername>$nesshusername</TspSSHUsername>
+         <TspSSHPassword>$nesshpassword</TspSSHPassword>
+         <TspMainIpSFTPUsername>$nemainipsftpusername</TspMainIpSFTPUsername>
+         <TspMainIpSFTPPassword>$nemainipsftppassword</TspMainIpSFTPPassword>
+         <NeDN>$nedn</NeDN>
+         <FilterDN>$NBI_HOME/DataFile/Retrieved/CM/FilteredDN_$sequence.txt</FilterDN>
+         <Parser>$NBI_HOME/bin/CMScript/Formatter/CM_TSP_Formatter.pl</Parser>
+         <AdministratorName>$adminname</AdministratorName>
+         <NodeName>$nenodename</NodeName>
+         <LdapHostIp>$neldaphostip</LdapHostIp>
+         <LdapPort>$neldapport</LdapPort>
+         <LdapPassword>$neldappassword</LdapPassword>
+         <OutputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_$netype_$never_$nename_$sequence_out.xml</OutputFile>
+         <NeVersion>$never</NeVersion>
+         <FormatConfig>$NBI_HOME/config/CM/CM_$netype_$never_APP_Config.xml</FormatConfig>
+         <ARNEFile>$NBI_HOME/DataFile/Retrieved/CM/Basic_arne_$sequence.xml</ARNEFile>         
+         <BasicCMRawFile>$NBI_HOME/DataFile/Retrieved/CM/BasicCM_$sequence_fmt.xml</BasicCMRawFile>	 
+         <RemoteLdapOutPath>/opt/telorb/axe/loadingGroup01_1/</RemoteLdapOutPath>         
+         <TspIOIpAddr>$netspioipaddr</TspIOIpAddr>
+         <TspIoIpSFTPUsername>$neioipsftpusername</TspIoIpSFTPUsername>
+         <TspIoIpSFTPPassword>$neioipsftppassword</TspIoIpSFTPPassword>
+         <RemoteDBFilePath>/opt/telorb/axe/adm/etc/SAPC/13B/$nename</RemoteDBFilePath> 
+      </Step>  
+      <Step name="Load" type="Load">
+          <InputFile>$NBI_HOME/DataFile/Retrieved/CM/CM_$netype_$never_$nename_$sequence_out.xml</InputFile>
+      </Step>
+      <Step name="Transform" type="Transform">
+				<DnPrefix>SubNetwork=$DnPrefix,</DnPrefix>
+			</Step>
+      <Step name="Write" type="DBWrite" >
+         <PurgeId>$netype_$never_$nename-SyncAct</PurgeId>
+      </Step>
+    </Activity>
+    <Activity id="$netype_$never_$nename-InvSyncAct">
+      <Step name="def" type="PreDefine">
+         <OSSRootMo>$OSSRootMo</OSSRootMo>
+				 <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+				 <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+      </Step>
+      <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_$netype_$never.xml</OSSMocFile>
+      <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_$netype_$never.xml</NMSMocFile>
+      <Step name="Collect" type="Command">
+         <Command>/usr/bin/perl $NBI_HOME/bin/CMScript/Formatter/CM_TSP_new_InvCollector.pl</Command>
+         <TspIpAddr>$neip</TspIpAddr>
+         <!--TspSSHUsername is used for real NE-->
+         <TspSSHUsername>$nesshusername</TspSSHUsername>
+         <TspSSHPassword>$nesshpassword</TspSSHPassword>
+         <TspMainIpSFTPUsername>$nemainipsftpusername</TspMainIpSFTPUsername>
+         <TspMainIpSFTPPassword>$nemainipsftppassword</TspMainIpSFTPPassword>
+         <TelorbShell>Proc_m0_s1</TelorbShell>
+         <TelorbPort>$netelorbport</TelorbPort>
+         <!--tspCLIUserName is used for CLI command like "show Node" -->
+         <tspCLIUserName>$tspCLIUserName</tspCLIUserName>
+         <tspCLIPassword>$tspCLIPassword</tspCLIPassword>
+         <tspCLIPort>$tspCLIPort</tspCLIPort>
+         <NeDN>$nedn</NeDN>
+         <FilterDN>$NBI_HOME/DataFile/Retrieved/CM/FilteredDN_$sequence.txt</FilterDN>
+         <Parser>$NBI_HOME/bin/CMScript/Formatter/CM_TSP_SAPC_InvFormatter.pl</Parser>
+         <RemoteCLIPath>/CLI/Inventory</RemoteCLIPath>
+         <InvCMD>createinventoryfile</InvCMD>
+         <RemoteOutputPath>/opt/telorb/axe/loadingGroup01_1/</RemoteOutputPath>
+         <OutputFile>$NBI_HOME/config/CM/StaticData/insert/Static_Insert_$netype_$never_$nename.xml</OutputFile>
+         <RemoteE00NodeType>/opt/telorb/axe/tsp/config/epct/E00NodeTypeSAPCCMCC.epct</RemoteE00NodeType>
+         <TspIOIpAddr>$netspioipaddr</TspIOIpAddr>
+         <TspIoIpSFTPUsername>$neioipsftpusername</TspIoIpSFTPUsername>
+         <TspIoIpSFTPPassword>$neioipsftppassword</TspIoIpSFTPPassword>
+         <RemoteDBFilePath>/opt/telorb/axe/adm/etc/SAPC/13B/$nename</RemoteDBFilePath>
+         <invCLICmdFile>$NBI_HOME/bin/CMScript/Formatter/CM_TSP_SAPC_InvCmd.cmd</invCLICmdFile>
+      </Step>
+      <Step name="FormatDn" type="Command">
+        <Command> sed 's/$OSSRootMo/$NmiDnPrefix/g' $NBI_HOME/config/CM/StaticData/insert/Static_Insert_$netype_$never_$nename.xml > $NBI_HOME/config/CM/StaticData/insert/Static_Insert_$netype_$never_$nename_tmp.xml; mv $NBI_HOME/config/CM/StaticData/insert/Static_Insert_$netype_$never_$nename_tmp.xml $NBI_HOME/config/CM/StaticData/insert/Static_Insert_$netype_$never_$nename.xml</Command>
+      </Step>
+    </Activity> 

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE stax SYSTEM "stax.dtd">
+
+<stax>
+    <script>
+       machine = '{ONV.DataCollection.RemoteIp}'
+    </script>
+   
+    <defaultcall function="main"/>
+    
+    <function name="main">
+    
+    <sequence>
+      <message log="1" level="'Info'">
+        'Step1: Installation Preparation Start on machine %s' % (machine)
+      </message>
+
+      <script>
+        chmod_script = '{Onv.Installation.CIHome}/script/changemode.sh'
+      </script>	
+      
+     <process name="'Install and commission Preparation'">
+       <location>machine</location>
+       <command mode="'shell'">chmod_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+     </process>
+    
+     <if expr="RC == 0">
+     <sequence>
+       <message log="1" level="'Info'">'Step1: Installation Preparation Finished'</message>
+     </sequence>
+     <else>
+       <sequence>
+         <message log="1" level="'Error'">
+         	'Step1: Installation Preparation Failed. RC=%s, invokeScript=%s.' \
+         	% (RC, chmod_script)
+         </message>
+         <message log="1" level="'Error'">'Terminating job'</message>
+         <terminate block="'main'"/>
+       </sequence>
+     </else>
+    </if>    	
+    	
+    	
+    	
+    	
+      <message log="1" level="'Info'">
+        'Step2: Installation Start on machine %s' % (machine)
+      </message>
+
+      <script>
+        InstallScript = '{Onv.Installation.CIHome}/script/installonv_ci.sh'
+        packageLoc = '{Onv.Installation.CIHome}/package/'
+      </script>	
+      
+     <process name="'install onv package'">
+       <location>machine</location>
+       <command mode="'shell'">'%s %s' % (InstallScript, packageLoc)</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+     </process>
+    
+     <if expr="RC == 0">
+     <sequence>
+       <message log="1" level="'Info'">'Step2: Installation Finished'</message>
+     </sequence>
+     <else>
+       <sequence>
+         <message log="1" level="'Error'">
+         	'Step2: Installation Failed, RC=%s, invokeScript=%s, \
+         	package location is %s' % (RC, InstallScript, packageLoc)
+         </message>
+         <message log="1" level="'Error'">'Terminating job'</message>
+         <terminate block="'main'"/>
+       </sequence>
+     </else>
+    </if>
+    
+      <message log="1" level="'Info'">
+        'Step3: Commission Start on machine %s' % (machine)
+      </message>
+
+      <script>
+        config_script = '{Onv.Installation.CIHome}/script/commission.sh'
+      </script>	
+      
+     <process name="'onv configuration'">
+       <location>machine</location>
+       <command mode="'shell'">config_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+     </process>
+    
+     <if expr="RC == 0">
+     <sequence>
+       <message log="1" level="'Info'">'Step3: Commission Finished'</message>
+     </sequence>
+     <else>
+       <sequence>
+         <message log="1" level="'Error'">
+         	'Step3: Commission Failed, RC=%s, invokeScript=%s.' \
+         	% (RC, config_script)
+         </message>
+         <message log="1" level="'Error'">'Terminating job'</message>
+         <terminate block="'main'"/>
+       </sequence>
+     </else>
+    </if>
+     
+     <message log="1" level="'Info'">
+        'Step4: Service-Startup Start on machine %s' % (machine)
+     </message>
+
+      <script>
+       param = "start"
+       ssr_onv_script = '%s %s' % ('{Onv.Installation.ONVSSRScript}', param)
+       start_onv_script = 'su - %s -c "%s"' % ("nmsadm", ssr_onv_script)
+      </script>	   
+    
+      <process name="'service bring up'">
+       <location>machine</location>
+       <command mode="'shell'">start_onv_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+     </process>
+
+     <if expr="RC == 0">
+     <sequence>
+       <message log="1" level="'Info'">'Step4: Service-Startup Finished'</message>
+     </sequence>
+     <else>
+       <sequence>
+         <message log="1" level="info">
+         	'Step4: Service-Startup Failed, RC=%s, invokeScript=%s.'	% (RC, start_onv_script)
+         </message>
+         <message log="1" level="'Error'">'Terminating job'</message>
+         <terminate block="'main'"/>
+       </sequence>
+     </else>
+    </if>
+    
+    <message log="1" level="'Info'">'Step5: Delay 5 minutes on machine %s' % (machine)</message>
+
+    <stafcmd name="''">
+       <location>machine</location>
+       <service>'delay'</service>
+       <request>'delay 300000' </request>
+    </stafcmd>
+        
+
+    <message log="1" level="'Info'">'Step6: Insert-DB-Record Start on machine %s ' % (machine)</message>
+
+    <script>
+        kpihandle_script = '{Onv.Installation.CIHome}/script/genKPIHandleJob.sh'
+    </script>	
+      
+     <process name="'Insert DB record'">
+       <location>machine</location>
+       <command mode="'shell'">kpihandle_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+     </process>
+    
+     <if expr="RC == 0">
+     <sequence>
+       <message log="1" level="'Info'">'Step6: Insert-DB-Record Finished'</message>
+     </sequence>
+     <else>
+       <sequence>
+         <message log="1" level="'Error'">
+         	'Step6: Insert-DB-Record Failed, RC=%s, invokeScript=%s.' \
+         	% (RC, kpihandle_script)
+         </message>
+         <message log="1" level="'Error'">'Terminating job'</message>
+         <terminate block="'main'"/>
+       </sequence>
+     </else>
+    </if>
+    
+    
+    <message log="1" level="'Info'">'Step7: Restart-Services Start on machine %s' % (machine)</message>
+
+      <script>
+       param = "restart"
+       restart_onv_script = '%s %s' % ('{Onv.Installation.ONVSSRScript}', param)
+       restart_onv_script = 'su - %s -c "%s"' % ("nmsadm", restart_onv_script)
+      </script>	   
+    
+      <process name="'restart onv services'">
+       <location>machine</location>
+       <command mode="'shell'">restart_onv_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+     </process>
+
+     <if expr="RC == 0">
+     <sequence>
+       <message log="1" level="'Info'">'Step7: Restart-Services Finished'</message>
+     </sequence>
+     <else>
+       <sequence>
+         <message log="1" level="'Error'">
+         	'Step7: Restart-Services Failed, RC=%s, invokeScript=%s.'	% (RC, restart_onv_script)
+         </message>
+         <message log="1" level="'Error'">'Terminating job'</message>
+         <terminate block="'main'"/>
+       </sequence>
+     </else>
+    </if>
+
+            
+    </sequence>
+   
+    </function>
+
+</stax>

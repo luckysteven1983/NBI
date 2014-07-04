@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE stax SYSTEM "stax.dtd">
+
+<stax>
+    <script>
+       machine = '{ONV.DataCollection.RemoteIp}'
+       logName = "InstallLog"
+    </script>
+   
+    <defaultcall function="main"/>
+    
+    <function name="main">
+    <function-import directory="./"/>	
+    
+    <sequence>
+    	
+    	<script>
+       chmod_script = '{Onv.Installation.CIGITHome}/{Onv.Installation.chmodScript}'	
+       msg_prompt = 'Step1: Installation Preparation Start'
+       msg_succ = 'Step1: Installation Preparation Finished'
+       msg_failed = 'Step1: Installation Preparation Failed, invokeScript=%s.' % (chmod_script)
+       msg_terminate = 'Terminating job'
+      </script>
+      
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_prompt, 'str_logname': logName }</call>
+      
+      <process name="'Install and commission Preparation'">
+       <location>machine</location>
+       <command mode="'shell'">chmod_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+      </process>
+    
+      <if expr="RC == 0">
+         <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_succ, 'str_logname': logName }</call>
+      <else>
+       <sequence>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_failed}</call>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_terminate, 'str_logname': logName }</call>
+         <terminate block="'main'"/>
+       </sequence>
+      </else>
+      </if>    	
+    	
+   	
+    	<script>
+       InstallScript = '{Onv.Installation.CIGITHome}/{Onv.Installation.InstallScript}'
+       packageLoc = '{Onv.Installation.CIGITHome}/package/'	
+       msg_prompt = 'Step2: Installation Start'
+       msg_succ = 'Step2: Installation Finished'
+       msg_failed = 'Step2: Installation Failed, invokeScript=%s, package location is %s' % (InstallScript, packageLoc)
+       msg_terminate = 'Terminating job'
+      </script>
+    	
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_prompt, 'str_logname': logName }</call>
+      
+      <process name="'install onv package'">
+       <location>machine</location>
+       <command mode="'shell'">'%s %s' % (InstallScript, packageLoc)</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+      </process>
+    
+      <if expr="RC == 0">
+         <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_succ, 'str_logname': logName }</call>
+      <else>
+       <sequence>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_failed, 'str_logname': logName }</call>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_terminate, 'str_logname': logName }</call>
+         <terminate block="'main'"/>
+       </sequence>
+      </else>
+      </if>
+    
+  	  <script>
+       config_script = '{Onv.Installation.CIGITHome}/{Onv.Installation.CommissionScript}'
+       msg_prompt = 'Step3: Commission Start'
+       msg_succ = 'Step3: Commission Finished'
+       msg_failed = 'Step3: Commission Failed, invokeScript=%s.' % (config_script)
+       msg_terminate = 'Terminating job'
+      </script>
+    	
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_prompt, 'str_logname': logName }</call>
+ 
+      <process name="'onv configuration'">
+       <location>machine</location>
+       <command mode="'shell'">config_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+      </process>
+    
+      <if expr="RC == 0">
+         <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_succ, 'str_logname': logName }</call>
+       <else>
+        <sequence>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_failed, 'str_logname': logName }</call>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_terminate, 'str_logname': logName }</call>
+         <terminate block="'main'"/>
+        </sequence>
+       </else>
+      </if>
+    
+      <script>
+       param = "start"
+       ssr_onv_script = '%s %s' % ('{Onv.Installation.SSRScript}', param)
+       start_onv_script = 'su - %s -c "%s"' % ("nmsadm", ssr_onv_script)
+       msg_prompt= 'Step4: Service-Startup Start'
+       msg_succ = 'Step4: Service-Startup Finished'
+       msg_failed = 'Step4: Service-Startup Failed, invokeScript=%s.'	% (start_onv_script)
+       msg_terminate = 'Terminating job'
+      </script>
+    	
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_prompt, 'str_logname': logName }</call>
+     
+      <process name="'service bring up'">
+       <location>machine</location>
+       <command mode="'shell'">start_onv_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+      </process>
+
+      <if expr="RC == 0">
+         <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_succ, 'str_logname': logName }</call>
+       <else>
+         <sequence>
+          <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_failed, 'str_logname': logName }</call>
+          <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_terminate, 'str_logname': logName }</call>
+          <terminate block="'main'"/>
+         </sequence>
+       </else>
+      </if>
+    
+      <script>
+       msg_prompt = 'Step5: Delay 5 minutes Start'
+       msg_succ ='Step5: Delay 5 minutes Finished'
+      </script>
+    
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_prompt, 'str_logname': logName }</call>
+
+      <stafcmd name="''">
+       <location>machine</location>
+       <service>'delay'</service>
+       <request>'delay 300000' </request>
+      </stafcmd>
+      
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_succ, 'str_logname': logName }</call>
+        
+      <script>
+       kpihandle_script = '{Onv.Installation.CIGITHome}/{Onv.Installation.KPIHandleJobGenScript}'
+       msg_prompt= 'Step6: Insert-DB-Record Start'
+       msg_succ = 'Step6: Insert-DB-Record Finished'
+       msg_failed = 'Step6: Insert-DB-Record Failed,invokeScript=%s.' % (kpihandle_script)
+       msg_terminate = 'Terminating job'
+      </script>
+    	
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_prompt, 'str_logname': logName }</call>
+      
+      <process name="'Insert DB record'">
+       <location>machine</location>
+       <command mode="'shell'">kpihandle_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+      </process>
+    
+      <if expr="RC == 0">
+         <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_succ, 'str_logname': logName }</call>
+       <else>
+        <sequence>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_failed, 'str_logname': logName }</call>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_terminate, 'str_logname': logName }</call>
+         <terminate block="'main'"/>
+        </sequence>
+       </else>
+      </if>
+    
+
+      <script>
+       param = "restart"
+       restart_onv_script = '%s %s' % ('{Onv.Installation.SSRScript}', param)
+       restart_onv_script = 'su - %s -c "%s"' % ("nmsadm", restart_onv_script)
+       msg_prompt= 'Step7: Restart-Services Start'
+       msg_succ = 'Step7: Restart-Services Finished'
+       msg_failed = 'Step7: Restart-Services Failed, invokeScript=%s.'	% (restart_onv_script)
+       msg_terminate = 'Terminating job'
+      </script>
+    	
+      <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_prompt, 'str_logname': logName }</call>
+  
+      <process name="'restart onv services'">
+       <location>machine</location>
+       <command mode="'shell'">restart_onv_script</command>
+       <stderr mode="'stdout'"/>
+       <returnstdout/>
+      </process>
+
+      <if expr="RC == 0">
+         <call function="'writeLog'">{ 'int_value': 0, 'str_msg' : msg_succ, 'str_logname': logName }</call>
+      <else>
+       <sequence>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_failed, 'str_logname': logName }</call>
+         <call function="'writeLog'">{ 'int_value': 1, 'str_msg' : msg_terminate, 'str_logname': logName }</call>
+         <terminate block="'main'"/>
+       </sequence>
+      </else>
+      </if>
+
+            
+    </sequence>
+   
+    </function>
+
+</stax>

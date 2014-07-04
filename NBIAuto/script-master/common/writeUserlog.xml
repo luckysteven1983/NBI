@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE stax SYSTEM "stax.dtd">
+
+<stax>
+     
+    <function name="writeLog">
+    
+    <function-prolog>
+      This function is used as an example in staf and stax demo workshop
+    </function-prolog>   
+    
+    <function-map-args>
+    <function-required-arg name="int_value">
+        A string write to user log INSTALLLOG
+    </function-required-arg>	
+    <function-required-arg name="str_msg">
+        A string write to user log 
+    </function-required-arg>
+    <function-required-arg name="str_logname">
+        A string which defines the logname
+    </function-required-arg>
+    </function-map-args>
+    
+    <sequence>
+    
+    <if expr="int_value == 0">	
+      <stafcmd name="'write user log level with info'">
+      <location>'local'</location>
+      <service>'log'</service>
+      <request>'log machine LOGNAME %s LEVEL info message "%s"' % (str_logname, str_msg) </request>
+      </stafcmd>
+    <else>
+    	<stafcmd name="'write user log level with info'">
+      <location>'local'</location>
+      <service>'log'</service>
+      <request>'log machine LOGNAME %s LEVEL error message "%s"' % (str_logname, str_msg) </request>
+      </stafcmd>
+    </else>
+    </if>
+    
+    <if expr="RC != 0">
+        <message>'Error: RC=%s, showmessage=%s, int_value=%d' % (RC, str_msg, int_value)</message>
+      <else>
+        <message>'Process RC was 0. showmessage=%s ' % str_msg</message>
+      </else>
+    </if>    
+    
+    </sequence>
+   
+    </function>
+
+</stax>

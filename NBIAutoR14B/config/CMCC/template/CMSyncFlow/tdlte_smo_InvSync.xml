@@ -1,0 +1,33 @@
+<Activity id="LTE-InvSyncAct">
+  <Step name="def" type="PreDefine">
+    <OSSRootMo>$OSSRootMo</OSSRootMo>
+    <OSSRegionRootMo>$OSSRegionRootMo</OSSRegionRootMo>
+    <NmiDnPrefix>$NmiDnPrefix</NmiDnPrefix>
+  </Step>
+  <OSSMocFile>$NBI_HOME/config/CM/CMDef_OSSMoc_TDLTE_SMOInv.xml</OSSMocFile>
+  <NMSMocFile>$NBI_HOME/config/CM/CMDef_NMSMoc_TDLTE_SMOInv.xml</NMSMocFile>
+  <Step name="Collect" type="Command">
+    <Command>cp $CIHome/testdata/ENODEB_HW.xml $NBI_HOME/DataFile/Retrieved/CM/LTE_Inventory_Raw_out_$sequence.xml</Command>
+  </Step>
+  <Step name="Format" type="Command">
+    <Command>$NBI_JAVA -jar $NBI_HOME/bin/CMScript/Formatter/LTEFormatter.jar</Command>
+    <InputFile>$NBI_HOME/DataFile/Retrieved/CM/LTE_Inventory_Raw_out_$sequence.xml</InputFile>
+    <ConfigFile>$NBI_HOME/config/CM/CMDef_OSSNMSMap_TDLTE_Inv.xml</ConfigFile>
+    <EscapeConfFile>$NBI_HOME/config/CM/CMSpecialCharMapping.txt</EscapeConfFile>
+    <OutputFile>$NBI_HOME/config/CM/StaticData/update/Static_Update_LTE_Inv.xml</OutputFile>
+  </Step>
+  <Step name="FormatDn" type="Command">
+    <Command>sed 's/$OSSRootMo/$NmiDnPrefix/g' $NBI_HOME/config/CM/StaticData/update/Static_Update_LTE_Inv.xml >$NBI_HOME/config/CM/StaticData/update/Static_Update_LTE_Inv_tmp.xml; mv $NBI_HOME/config/CM/StaticData/update/Static_Update_LTE_Inv_tmp.xml $NBI_HOME/config/CM/StaticData/update/Static_Update_LTE_Inv.xml</Command>
+  </Step>
+</Activity>
+<Activity id="LTE_Static_Inv_ImportAct" timeout="5000">
+  <Step name="merge" type="Command">
+    <Command>perl $NBI_HOME/bin/CMScript/Formatter/ENODEB_DataTool_Static_merger.pl</Command>
+  </Step>
+  <Step name="import1" type="Command">
+    <Command>$NBI_HOME/bin/DataTool -f -m import -d standby -s $NBI_HOME/config/CM/StaticData/update/Static_Update_LTE_Inv_1.xml</Command>
+  </Step>
+  <Step name="import2" type="Command">
+    <Command>$NBI_HOME/bin/DataTool -f -m import -d standby -s $NBI_HOME/config/CM/StaticData/update/Static_Update_LTE_Inv_2.xml</Command>
+  </Step>
+</Activity>

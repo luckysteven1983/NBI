@@ -1,0 +1,14 @@
+#!/bin/sh
+
+ID=$1
+
+param_CIHome="DataCollection.CIGITHome"
+param=$1.$param_CIHome
+
+CIGITHome=`staf local var get system var "$param" |grep -v Response |grep -v '^-'`
+. $CIGITHome/script-master/common/common.fun
+
+
+TargetDir=`getSTAFVariableValue $1 "DataCollection.TargetDir" "local"`
+
+echo $TargetDir

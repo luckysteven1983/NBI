@@ -1,0 +1,4 @@
+urlid onvdb
+url jdbc:hsqldb:hsql://localhost/onvdb;hsqldb.write_delay=false;
+username SA
+password

@@ -1,0 +1,15 @@
+<OSSName name="oss1_$nename">
+  <ip>$ossip</ip>
+  <user>$ossusername</user>
+  <passwd>$osspassword</passwd>
+  <remotepath>/var/opt/ericsson/sgw/outputfiles1/xml/cudb/$nename</remotepath>
+  <localpath>/DataFile/Retrieved/PM/CounterFile/$localpath</localpath>
+  <wildcard>*AUCSUBSjob_$nename*,*HssEsmUsersStoredjob_$nename*</wildcard>
+  <filetype>XMLHSS</filetype>
+  <mode>I</mode>
+  <enable>true</enable>
+  <ManagedElement>$nename</ManagedElement>
+  <TimeShift>0</TimeShift>
+  <netype>$netype</netype>
+</OSSName>
+

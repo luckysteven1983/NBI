@@ -1,0 +1,27 @@
+<PM-CLI name="COLLECT-$nename">
+  <Enable>true</Enable>
+  <LoginType>Telnet</LoginType>
+  <Accounts UserName="$ossusername" Ip="$ossip" Password="$osspassword" />
+  <ManagedElement>$nename</ManagedElement>
+  <OmcDnPrefix>SubNetwork=NRO_RootMo</OmcDnPrefix>
+  <CollectOmcMoc>FeFunction</CollectOmcMoc>
+  <ExecuteFile>/bin/PMScript/pmmml.pl</ExecuteFile>
+  <LocalPath>/DataFile/Retrieved/PM/CounterFile/$localpath</LocalPath>
+</PM-CLI>
+<OSSName name="oss1_$nename">
+  <ip>$ossip</ip>
+  <user>$ossusername</user>
+  <passwd>$osspassword</passwd>
+  <remotepath>/var/opt/ericsson/sgw/outputfiles1/asn1/apg_sts/$nename</remotepath>
+  <localpath>/DataFile/Retrieved/PM/CounterFile/$localpath</localpath>
+  <wildcard>*$nename*</wildcard>
+  <filetype>ASN.1STFIOP</filetype>
+  <mode>I</mode>
+  <enable>true</enable>
+  <ManagedElement>$nename</ManagedElement>
+  <TimeShift>8</TimeShift>
+  <netype>$netype</netype>
+  <BCMode>CLUSTER</BCMode>
+</OSSName>
+
+
